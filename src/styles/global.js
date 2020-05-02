@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { $charcoal } from 'styles/colors';
+import { disableHighlight } from 'styles/mixins';
 
 import CanelaMed from 'fonts/canela/canela-med.woff2';
 
@@ -18,6 +19,7 @@ const GlobalStyles = createGlobalStyle`
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    ${disableHighlight}
   }
 
   a {

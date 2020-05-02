@@ -1,4 +1,9 @@
-export const test = '';
+import styled from 'styled-components';
+
+export const CenterViewport = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 export const disableHighlight = `
   -webkit-user-select: none;
