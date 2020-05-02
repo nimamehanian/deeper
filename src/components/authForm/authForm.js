@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { animated, useTransition } from 'react-spring';
+import { easeInOutQuint } from 'styles/mixins';
 import { $charcoal, $pussy } from 'styles/colors';
 
 import Button from 'components/button/button';
@@ -22,12 +24,11 @@ const AuthFormWrapper = styled.div`
 `;
 
 const FieldWrapper = styled.div`
+  position: relative;
+  padding-top: 48px;
   display: flex;
   flex-direction: column;
   width: 343px;
-  & > div {
-    margin: 4px 0px;
-  }
   span {
     margin: 16px 0px;
   }
@@ -36,6 +37,20 @@ const FieldWrapper = styled.div`
 const Title = styled.div`
   font-family: 'Canela Med';
   font-size: 32px;
+  margin: 0px 0px 16px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  will-change: opacity;
+`;
+
+const Field = styled.div`
+  transform: ${({ isVisible }) => `translate3d(0, ${isVisible ? 0 : -8}px, 0)`};
+  opacity: ${({ isVisible }) => isVisible ? 1 : 0};
+  height: ${({ isVisible }) => isVisible ? '48px' : '0px'};
+  margin-bottom: ${({ isVisible }) => isVisible ? '4px' : '0px'};
+  z-index: ${({ isVisible }) => isVisible ? 1 : -1};
+  transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
 `;
 
 const ForgotPw = styled.div`
@@ -44,7 +59,11 @@ const ForgotPw = styled.div`
   font-family: 'Andes Reg';
   color: ${$pussy};
   cursor: pointer;
-  transition: all 555ms cubic-bezier(0.165, 0.840, 0.000, 1.115);
+  transform: ${({ isVisible }) => `translate3d(0, ${isVisible ? 0 : -8}px, 0)`};
+  opacity: ${({ isVisible }) => isVisible ? 1 : 0};
+  height: ${({ isVisible }) => isVisible ? '17px' : '0px'};
+  z-index: ${({ isVisible }) => isVisible ? 1 : -1};
+  transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
   &:hover {
     color: ${$charcoal}
   }
@@ -57,7 +76,7 @@ const AuthMode = styled.div`
     color: ${$pussy};
     cursor: pointer;
     margin-left: 4px;
-    transition: all 555ms cubic-bezier(0.165, 0.840, 0.000, 1.115);
+    transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
     &:hover {
       color: ${$charcoal}
     }
@@ -66,65 +85,95 @@ const AuthMode = styled.div`
 
 function AuthForm() {
   // options: 'signin', 'signup', 'resetpw'
-  const [mode, setMode] = useState('signin');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [{ mode }, setMode] = useState({ mode: 'signin' });
+  const [{ isPasswordVisible }, setIsPasswordVisible] = useState({ isPasswordVisible: false });
+  const [{ email }, setEmail] = useState({ email: '' });
+  const [{ password }, setPassword] = useState({ password: '' });
 
-  const title = {
+  const titles = {
     signin: 'Sign in to your account',
     signup: 'Create your account',
     resetpw: 'Reset your password',
   };
 
+  const transitions = useTransition(titles[mode], title => title, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    // config: { mass: 1, tension: 360, friction: 20 },
+    config: { duration: 400, easing: easeInOutQuint },
+  });
+
   return (
     <AuthFormWrapper>
       <FieldWrapper>
-        <Title>{title[mode]}</Title>
-        <TextField
-          type="email"
-          name="email"
-          label="Email"
-          value={email}
-          onChange={({ target: { value } }) => setEmail(value)}
-        />
-        {mode !== 'resetpw' && <TextField
-          type={isPasswordVisible ? 'passwordtext' : 'password'}
-          name="password"
-          label="Password"
-          value={password}
-          onChange={({ target: { value } }) => setPassword(value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  edge="end"
-                  aria-label="toggle password visibility"
-                  style={{ background: 'none' }}
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                  {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            )
-          }}
-        />}
-        {mode === 'signin' && <ForgotPw onClick={() => setMode('resetpw')}>Forgot your password?</ForgotPw>}
+        {transitions.map(({ item, key, props }) => {
+          return (
+            <animated.div key={key} style={{ ...props }}>
+              <Title>{item}</Title>
+            </animated.div>
+          );
+        })}
+
+        <Field isVisible>
+          <TextField
+            type="email"
+            name="email"
+            label="Email"
+            value={email}
+            fullWidth
+            onChange={({ target: { value } }) => setEmail({ email: value })}
+          />
+        </Field>
+
+        <Field isVisible={mode !== 'resetpw'}>
+          <TextField
+            type={isPasswordVisible ? 'passwordtext' : 'password'}
+            name="password"
+            label="Password"
+            value={password}
+            fullWidth
+            onChange={({ target: { value } }) => setPassword({ password: value })}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    aria-label="toggle password visibility"
+                    style={{ background: 'none' }}
+                    onClick={() => setIsPasswordVisible({ isPasswordVisible: !isPasswordVisible })}
+                  >
+                    {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          />
+        </Field>
+
+        <ForgotPw
+          isVisible={mode === 'signin'}
+          onClick={() => setMode({ mode: 'resetpw' })}
+        >
+          {'Forgot your password?'}
+        </ForgotPw>
+
         <span>
           <Button
             isDisabled={mode !== 'signin'}
             onClickHandler={() => console.log('SIGNING IN...')}
           />
         </span>
+
         <AuthMode>
           {mode === 'signin' || mode === 'resetpw' ? 'Don\'t have an account?' : 'Have an account?'}
-          <span onClick={() => setMode(mode === 'signin' || mode === 'resetpw' ? 'signup' : 'signin')}>
+          <span onClick={() => setMode(mode === 'signin' || mode === 'resetpw' ? { mode: 'signup' } : { mode: 'signin' })}>
             {mode === 'signin' || mode === 'resetpw' ? 'Sign up' : 'Sign in'}
           </span>
         </AuthMode>
+
       </FieldWrapper>
     </AuthFormWrapper>
   );
 }
-
 export default AuthForm;

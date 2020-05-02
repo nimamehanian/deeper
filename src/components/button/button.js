@@ -15,7 +15,7 @@ const ButtonWrapper = styled.div`
   color: #fff;
   background: ${({ isDisabled, color }) => isDisabled ? `${color}66` : color};
   box-shadow: 0px 4px 6px rgba(50, 50, 93, 0.11), 0px 1px 3px rgba(0, 0, 0, 0.08);
-  transition: all 555ms cubic-bezier(0.165, 0.840, 0.000, 1.115);
+  transition: all 444ms cubic-bezier(0.83, 0, 0.17, 1);
   &:hover {
     ${({ isDisabled }) => isDisabled ? '' : `
       box-shadow: 0px 7px 14px rgba(50, 50, 93, 0.11), 0px 3px 6px rgba(0, 0, 0, 0.08);
