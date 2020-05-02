@@ -100,7 +100,6 @@ function AuthForm() {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    // config: { mass: 1, tension: 360, friction: 20 },
     config: { duration: 400, easing: easeInOutQuint },
   });
 
