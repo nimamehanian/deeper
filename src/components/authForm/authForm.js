@@ -83,6 +83,11 @@ const ForgotPw = styled.div`
   height: ${({ isVisible }) => isVisible ? '17px' : '0px'};
   z-index: ${({ isVisible }) => isVisible ? 1 : -1};
   transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
+  &:hover {
+    @media (pointer: fine) {
+      color: ${$charcoal}
+    }
+  }
 `;
 
 const AuthMode = styled.div`
@@ -93,6 +98,11 @@ const AuthMode = styled.div`
     cursor: pointer;
     margin-left: 4px;
     transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
+    &:hover {
+    @media (pointer: fine) {
+      color: ${$charcoal}
+    }
+  }
   }
 `;
 
