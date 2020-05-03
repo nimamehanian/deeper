@@ -28,11 +28,6 @@ function App() {
     },
   });
 
-  // <Header>
-  //   <Link to="/">Deeper</Link>
-  //   <Link to="/auth">sign in</Link>
-  // </Header>
-
   return (
     <div>
       <GlobalStyles />

@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { $background, $charcoal } from 'styles/colors';
+import { $background, $charcoal, $pussy } from 'styles/colors';
 import { disableHighlight } from 'styles/mixins';
 
 import CanelaMed from 'fonts/canela/canela-med.woff2';
@@ -14,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
     outline: none;
     font-size: 16px;
     color: ${$charcoal};
+    caret-color: ${$pussy};
     background: ${$background};
     font-family: 'Andes Reg';
     text-rendering: optimizeLegibility;
