@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { $charcoal } from 'styles/colors';
+import { $background, $charcoal } from 'styles/colors';
 import { disableHighlight } from 'styles/mixins';
 
 import CanelaMed from 'fonts/canela/canela-med.woff2';
@@ -14,7 +14,7 @@ const GlobalStyles = createGlobalStyle`
     outline: none;
     font-size: 16px;
     color: ${$charcoal};
-    background: #f6f9fc;
+    background: ${$background};
     font-family: 'Andes Reg';
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;

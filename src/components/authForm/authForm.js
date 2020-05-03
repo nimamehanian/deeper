@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { animated, useTransition } from 'react-spring';
 import { easeInOutQuint } from 'styles/mixins';
-import { $charcoal, $pussy } from 'styles/colors';
+import { $background, $charcoal, $pussy, $gold, $sunset, $GOLDEN_RATIO_MICRO } from 'styles/colors';
 
 import Button from 'components/button/button';
 
@@ -14,13 +14,32 @@ import { InputAdornment, IconButton } from '@material-ui/core';
 
 const AuthFormWrapper = styled.div`
   position: absolute;
-  top: 60px;
+  top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+`;
+
+const Header = styled.div`
+  color: ${$charcoal};
+  background: ${$background};
+  height: 60px;
+  font-size: 30px;
+  font-family: 'Canela Med';
+  line-height: 2;
+  letter-spacing: ${$GOLDEN_RATIO_MICRO}px;
+  padding: 0px 8px;
+
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
 `;
 
 const FieldWrapper = styled.div`
@@ -105,6 +124,9 @@ function AuthForm() {
 
   return (
     <AuthFormWrapper>
+      <Header>
+        Deeper
+      </Header>
       <FieldWrapper>
         {transitions.map(({ item, key, props }) => {
           return (

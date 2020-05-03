@@ -6,6 +6,8 @@ export const $cream = '#ffead0';
 export const $pussy = '#f76f8e';
 export const $charcoal = '#37505c';
 
+export const $background = '#f6f9fc';
+
 export const $test = '#e07a5f';
 
 export const $GOLDEN_RATIO_MACRO = 1.61803399;
