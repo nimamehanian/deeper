@@ -38,5 +38,5 @@ const Root = ({ store }) => (
 
 render(
   <Root store={mainStore} />,
-  document.getElementById('app')
+  document.getElementById('⚛️')
 );

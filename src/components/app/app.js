@@ -1,42 +1,29 @@
 import { hot } from 'react-hot-loader/root';
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { Switch, Route } from 'react-router-dom';
+import PrivateRoute from 'components/privateRoute/privateRoute';
+
 import GlobalStyles from 'styles/global';
+import uiTheme from 'styles/uiTheme';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
+
+import { UserProvider } from 'components/userProvider/userProvider';
 import AuthForm from 'components/authForm/authForm';
-import { $sunset, $pussy, $charcoal, $GOLDEN_RATIO_MICRO } from 'styles/colors';
+import Dashboard from 'components/dashboard/dashboard';
 
 function App() {
-  const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: $pussy,
-      },
-      text: {
-        primary: $charcoal,
-      }
-    },
-    typography: {
-      fontFamily: 'Andes Reg',
-    },
-    props: {
-      MuiButtonBase: {
-        disableRipple: true,
-      },
-    },
-  });
-
+  const theme = createMuiTheme(uiTheme);
   return (
     <div>
       <GlobalStyles />
       <ThemeProvider theme={theme}>
-        <Switch>
-          <Route exact path="/auth" render={(props) => <AuthForm {...props} />} />
-          {/* <Route exact path="/pathB" component={ComponentB} /> */}
-        </Switch>
-        {/* <Footer /> */}
+        <UserProvider>
+          <Switch>
+            <Route exact path="/auth" render={(props) => <AuthForm {...props} />} />
+            <PrivateRoute exact path="/dashboard" component={Dashboard} redirectPath="/auth" />
+          </Switch>
+        </UserProvider>
       </ThemeProvider>
     </div>
   );

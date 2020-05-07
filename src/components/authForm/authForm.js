@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
+import firebase from 'FB';
+import { UserContext } from 'components/userProvider/userProvider';
 import styled from 'styled-components';
 import { animated, useTransition } from 'react-spring';
 import { easeInOutQuint } from 'styles/mixins';
-import { $background, $charcoal, $pussy, $gold, $sunset, $GOLDEN_RATIO_MICRO } from 'styles/colors';
+import { $background, $charcoal, $pussy, $GOLDEN_RATIO_MICRO } from 'styles/colors';
+import includes from 'lodash/includes';
 
 import Button from 'components/button/button';
 
@@ -99,19 +103,39 @@ const AuthMode = styled.div`
     margin-left: 4px;
     transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
     &:hover {
-    @media (pointer: fine) {
-      color: ${$charcoal}
+      @media (pointer: fine) {
+        color: ${$charcoal}
+      }
     }
-  }
   }
 `;
 
-function AuthForm() {
+function AuthForm({ authMode, history }) {
+  const { currentUser } = useContext(UserContext);
   // options: 'signin', 'signup', 'resetpw'
-  const [{ mode }, setMode] = useState({ mode: 'signin' });
+  const [{ mode }, setMode] = useState(authMode);
   const [{ isPasswordVisible }, setIsPasswordVisible] = useState({ isPasswordVisible: false });
   const [{ email }, setEmail] = useState({ email: '' });
   const [{ password }, setPassword] = useState({ password: '' });
+
+  async function handleSubmit() {
+    switch (mode) {
+      case 'signin':
+        try {
+          await firebase.signIn(email, password);
+          history.push('/dashboard');
+          return;
+        } catch ({ code, message }) {
+          console.error(code, message);
+        }
+      case 'signup':
+        return console.log('SIGNING UP...');
+      case 'resetpw':
+        return console.log('RESETTING PASSWORD...');
+      default:
+        return console.log('HUH?');
+    }
+  }
 
   const titles = {
     signin: 'Sign in to your account',
@@ -127,78 +151,96 @@ function AuthForm() {
   });
 
   return (
-    <AuthFormWrapper>
-      <Header>
-        Deeper
-      </Header>
-      <FieldWrapper>
-        {transitions.map(({ item, key, props }) => {
-          return (
-            <animated.div key={key} style={{ ...props }}>
-              <Title>{item}</Title>
-            </animated.div>
-          );
-        })}
+    currentUser ? <Redirect to='/dashboard' /> :
+      <AuthFormWrapper>
+        <Header>
+          Deeper
+        </Header>
+        <FieldWrapper>
+          {transitions.map(({ item, key, props }) => {
+            return (
+              <animated.div key={key} style={{ ...props }}>
+                <Title>{item}</Title>
+              </animated.div>
+            );
+          })}
 
-        <Field isVisible>
-          <TextField
-            type="email"
-            name="email"
-            label="Email"
-            value={email}
-            fullWidth
-            onChange={({ target: { value } }) => setEmail({ email: value })}
-          />
-        </Field>
+          <Field isVisible>
+            <TextField
+              type="email"
+              name="email"
+              label="Email"
+              value={email}
+              fullWidth
+              onChange={({ target: { value: email } }) => setEmail({ email })}
+            />
+          </Field>
 
-        <Field isVisible={mode !== 'resetpw'}>
-          <TextField
-            type={isPasswordVisible ? 'passwordtext' : 'password'}
-            name="password"
-            label="Password"
-            value={password}
-            fullWidth
-            onChange={({ target: { value } }) => setPassword({ password: value })}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    aria-label="toggle password visibility"
-                    style={{ background: 'none' }}
-                    onClick={() => setIsPasswordVisible({ isPasswordVisible: !isPasswordVisible })}
-                  >
-                    {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-        </Field>
+          <Field isVisible={mode !== 'resetpw'}>
+            <TextField
+              type={isPasswordVisible ? 'passwordtext' : 'password'}
+              name="password"
+              label="Password"
+              value={password}
+              fullWidth
+              onChange={({ target: { value: password } }) => setPassword({ password })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      aria-label="toggle password visibility"
+                      style={{ background: 'none' }}
+                      onClick={() => setIsPasswordVisible({ isPasswordVisible: !isPasswordVisible })}
+                    >
+                      {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Field>
 
-        <ForgotPw
-          isVisible={mode === 'signin'}
-          onClick={() => setMode({ mode: 'resetpw' })}
-        >
-          {'Forgot your password?'}
-        </ForgotPw>
+          <ForgotPw
+            isVisible={mode === 'signin'}
+            onClick={() => setMode({ mode: 'resetpw' })}
+          >
+            {'Forgot your password?'}
+          </ForgotPw>
 
-        <span>
-          <Button
-            isDisabled={mode !== 'signin'}
-            onClickHandler={() => console.log('SIGNING IN...')}
-          />
-        </span>
-
-        <AuthMode>
-          {mode === 'signin' || mode === 'resetpw' ? 'Don\'t have an account?' : 'Have an account?'}
-          <span onClick={() => setMode(mode === 'signin' || mode === 'resetpw' ? { mode: 'signup' } : { mode: 'signin' })}>
-            {mode === 'signin' || mode === 'resetpw' ? 'Sign up' : 'Sign in'}
+          <span>
+            <Button
+              isDisabled={
+                // mode !== 'signin' ||
+                email.length < 6 ||
+                !includes(email, '@') ||
+                !includes(email, '.') ||
+                password.length < 8
+              }
+              onClickHandler={() => handleSubmit()}
+            />
           </span>
-        </AuthMode>
 
-      </FieldWrapper>
-    </AuthFormWrapper>
+          <AuthMode>
+            {mode === 'signin' || mode === 'resetpw' ? 'Don\'t have an account?' : 'Have an account?'}
+            <span onClick={() => setMode(mode === 'signin' || mode === 'resetpw' ? { mode: 'signup' } : { mode: 'signin' })}>
+              {mode === 'signin' || mode === 'resetpw' ? 'Sign up' : 'Sign in'}
+            </span>
+          </AuthMode>
+
+        </FieldWrapper>
+      </AuthFormWrapper>
   );
 }
+
+AuthForm.defaultProps = {
+  authMode: { mode: 'signin' },
+};
+
+AuthForm.propTypes = {
+  authMode: PropTypes.shape({
+    mode: PropTypes.oneOf(['signin', 'signup', 'resetpw']),
+  }),
+};
+
 export default AuthForm;

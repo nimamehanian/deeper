@@ -38,7 +38,7 @@ const config = {
       utils: `${__dirname}/src/utils`,
       src: `${__dirname}/src`,
       root: `${__dirname}`,
-      FB: `${__dirname}/src/initFirebase`,
+      FB: `${__dirname}/initFirebase`,
     },
   },
 
