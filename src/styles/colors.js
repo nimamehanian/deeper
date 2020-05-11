@@ -6,6 +6,11 @@ export const $cream = '#ffead0';
 export const $pussy = '#f76f8e';
 export const $charcoal = '#37505c';
 
+export const $outline = '#3d5465';
+
+export const $border = '#39444d';
+
+export const $darkBg = '#16212c';
 export const $background = '#f6f9fc';
 
 export const $test = '#e07a5f';
