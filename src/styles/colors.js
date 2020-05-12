@@ -6,7 +6,7 @@ export const $cream = '#ffead0';
 export const $pussy = '#f76f8e';
 export const $charcoal = '#37505c';
 
-export const $outline = '#3d5465';
+export const $outline = '#3d5465'; // use this
 
 export const $border = '#39444d';
 

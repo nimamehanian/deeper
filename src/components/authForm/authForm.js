@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { animated, useTransition } from 'react-spring';
 import { easeInOutQuint } from 'styles/mixins';
 import { $background, $charcoal, $pussy, $GOLDEN_RATIO_MICRO } from 'styles/colors';
+import { transition } from 'styles/mixins';
 import includes from 'lodash/includes';
 
 import Button from 'components/button/button';
@@ -73,7 +74,7 @@ const Field = styled.div`
   height: ${({ isVisible }) => isVisible ? '48px' : '0px'};
   margin-bottom: ${({ isVisible }) => isVisible ? '4px' : '0px'};
   z-index: ${({ isVisible }) => isVisible ? 1 : -1};
-  transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
+  ${transition}
 `;
 
 const ForgotPw = styled.div`
@@ -86,7 +87,7 @@ const ForgotPw = styled.div`
   opacity: ${({ isVisible }) => isVisible ? 1 : 0};
   height: ${({ isVisible }) => isVisible ? '17px' : '0px'};
   z-index: ${({ isVisible }) => isVisible ? 1 : -1};
-  transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
+  ${transition}
   &:hover {
     @media (pointer: fine) {
       color: ${$charcoal}
@@ -101,7 +102,7 @@ const AuthMode = styled.div`
     color: ${$pussy};
     cursor: pointer;
     margin-left: 4px;
-    transition: all 400ms cubic-bezier(0.83, 0, 0.17, 1);
+    ${transition}
     &:hover {
       @media (pointer: fine) {
         color: ${$charcoal}
