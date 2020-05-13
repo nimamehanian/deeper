@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { $darkBg } from 'styles/colors';
 import { transition } from 'styles/mixins';
 
-
+import Sidebar from 'components/sidebar/sidebar';
 import { UserContext } from 'components/userProvider/userProvider';
 
 const DashboardWrapper = styled.div`
@@ -27,11 +27,14 @@ function Dashboard() {
   const { currentUser } = useContext(UserContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <DashboardWrapper isSidebarOpen={isSidebarOpen}>
-      <span onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-        Welcome, {currentUser.email}!
-      </span>
-    </DashboardWrapper>
+    <>
+      <Sidebar />
+      <DashboardWrapper isSidebarOpen={isSidebarOpen}>
+        <span onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          Welcome, {currentUser.email}!
+        </span>
+      </DashboardWrapper>
+    </>
   );
 }
 

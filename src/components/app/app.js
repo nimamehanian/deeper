@@ -10,7 +10,6 @@ import { createMuiTheme } from '@material-ui/core';
 
 import { UserProvider } from 'components/userProvider/userProvider';
 import AuthForm from 'components/authForm/authForm';
-import Sidebar from 'components/sidebar/sidebar';
 import Dashboard from 'components/dashboard/dashboard';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
       <GlobalStyles />
       <ThemeProvider theme={theme}>
         <UserProvider>
-          <Sidebar />
           <Switch>
             <Route exact path="/auth" render={(props) => <AuthForm {...props} />} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} redirectPath="/auth" />
