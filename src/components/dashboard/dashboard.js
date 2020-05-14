@@ -4,6 +4,7 @@ import { $darkBg } from 'styles/colors';
 import { transition } from 'styles/mixins';
 
 import Sidebar from 'components/sidebar/sidebar';
+import Hamburger from 'components/hamburger/hamburger';
 import { UserContext } from 'components/userProvider/userProvider';
 
 const DashboardWrapper = styled.div`
@@ -18,21 +19,17 @@ const DashboardWrapper = styled.div`
   z-index: 1;
   transform: ${({ isSidebarOpen }) => `translate3d(${isSidebarOpen ? 232 : 0}px, 0px, 0px)`};
   ${transition}
-  span {
-    cursor: pointer;
-  }
 `;
 
 function Dashboard() {
   const { currentUser } = useContext(UserContext);
+  // e.g., currentUser.email, etc.
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
     <>
+      <Hamburger isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Sidebar />
       <DashboardWrapper isSidebarOpen={isSidebarOpen}>
-        <span onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-          Welcome, {currentUser.email}!
-        </span>
       </DashboardWrapper>
     </>
   );
