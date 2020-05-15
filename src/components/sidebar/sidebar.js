@@ -10,7 +10,7 @@ const SidebarWrapper = styled.div`
   top: 0px;
   bottom: 0px;
   left: 0px;
-  background: ${alpha($cream)};
+  background: ${alpha($cream, 8)};
   box-shadow: inset -9px 0 12px -9px rgba(0, 0, 0, 1);
   width: 61.8%;
   z-index: -1;
